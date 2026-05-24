@@ -1,0 +1,27 @@
+# Gradle
+.gradle/
+build/
+app/build/
+**/build/
+
+# Android local config
+local.properties
+*.iml
+
+# IntelliJ / Android Studio
+.idea/
+*.iws
+*.ipr
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystore / firma (NUNCA subir al repo)
+*.jks
+*.keystore
+
+# macOS
+.DS_Store
+
+# Node (por si acaso)
+node_modules/

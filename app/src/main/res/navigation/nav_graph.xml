@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/beatsFragment">
+
+    <!-- ── BEATS ────────────────────────────────────────── -->
+    <fragment android:id="@+id/beatsFragment"
+        android:name="com.letmc.sound.ui.beats.BeatsFragment"
+        android:label="Beats">
+        <action android:id="@+id/action_beats_to_detail" app:destination="@id/beatDetailFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/beatDetailFragment"
+        android:name="com.letmc.sound.ui.beats.BeatDetailFragment"
+        android:label="Detalle">
+        <argument android:name="beatId" app:argType="string"/>
+    </fragment>
+
+    <!-- ── LYRICS ───────────────────────────────────────── -->
+    <fragment android:id="@+id/lyricsFragment"
+        android:name="com.letmc.sound.ui.lyrics.LyricsFragment"
+        android:label="Letras">
+        <action android:id="@+id/action_lyrics_to_detail" app:destination="@id/lyricDetailFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/lyricDetailFragment"
+        android:name="com.letmc.sound.ui.lyrics.LyricDetailFragment"
+        android:label="Letra">
+        <argument android:name="lyricId" app:argType="string"/>
+        <action android:id="@+id/action_lyricDetail_to_chat" app:destination="@id/chatDetailFragment"/>
+    </fragment>
+
+    <!-- ── SERVICES (Film + Graphic) ────────────────────── -->
+    <fragment android:id="@+id/servicesFragment"
+        android:name="com.letmc.sound.ui.services.ServicesFragment"
+        android:label="Servicios">
+        <action android:id="@+id/action_services_to_detail" app:destination="@id/serviceDetailFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/serviceDetailFragment"
+        android:name="com.letmc.sound.ui.services.ServiceDetailFragment"
+        android:label="Perfil servicio">
+        <argument android:name="musicianId" app:argType="string"/>
+        <argument android:name="serviceType" app:argType="string" android:defaultValue="filmmaker"/>
+        <action android:id="@+id/action_serviceDetail_to_chat" app:destination="@id/chatDetailFragment"/>
+    </fragment>
+
+    <!-- ── CHAT ─────────────────────────────────────────── -->
+    <fragment android:id="@+id/chatListFragment"
+        android:name="com.letmc.sound.ui.chat.ChatListFragment"
+        android:label="Mensajes">
+        <action android:id="@+id/action_chatList_to_chatDetail" app:destination="@id/chatDetailFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/chatDetailFragment"
+        android:name="com.letmc.sound.ui.chat.ChatDetailFragment"
+        android:label="Chat">
+        <argument android:name="conversationId" app:argType="string"/>
+    </fragment>
+
+    <!-- ── PROFILE ──────────────────────────────────────── -->
+    <fragment android:id="@+id/profileFragment"
+        android:name="com.letmc.sound.ui.profile.ProfileFragment"
+        android:label="Perfil">
+        <action android:id="@+id/action_profile_to_editProfile" app:destination="@id/editProfileFragment"/>
+        <action android:id="@+id/action_profile_to_uploadBeat" app:destination="@id/uploadBeatFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/editProfileFragment"
+        android:name="com.letmc.sound.ui.profile.EditProfileFragment"
+        android:label="Editar perfil"/>
+
+    <fragment android:id="@+id/uploadBeatFragment"
+        android:name="com.letmc.sound.ui.upload.UploadBeatFragment"
+        android:label="Publicar beat"/>
+
+    <!-- ── NOTIFICATIONS ────────────────────────────────── -->
+    <fragment android:id="@+id/notificationsFragment"
+        android:name="com.letmc.sound.ui.notifications.NotificationsFragment"
+        android:label="Notificaciones"/>
+
+</navigation>
