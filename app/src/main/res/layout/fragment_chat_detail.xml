@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Escribe un mensaje..."
-            android:hintTextColor="#555555"
+            android:textColorHint="#555555"
             android:textColor="#FFFFFF"
             android:background="@drawable/input_background"
             android:padding="10dp"

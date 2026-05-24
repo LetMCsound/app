@@ -51,6 +51,5 @@ dependencies {
     // Seguridad (almacenar token)
     implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
-    // PDF viewer
-    implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+    // PDF viewer eliminado: no se usa en el código y la versión beta.1 no resuelve en JitPack
 }
