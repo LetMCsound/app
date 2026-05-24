@@ -39,7 +39,7 @@ public class BeatDetailFragment extends Fragment {
 
     private void loadBeat(String id) {
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
-        api.getBeatById("*,musicians(name,avatar_url,slug)", "eq." + id)
+        api.getBeatById("*", "eq." + id)
             .enqueue(new Callback<List<Beat>>() {
                 @Override public void onResponse(Call<List<Beat>> c, Response<List<Beat>> r) {
                     if (binding == null || !isAdded()) return;
@@ -57,18 +57,19 @@ public class BeatDetailFragment extends Fragment {
 
     private void populateUI() {
         binding.tvTitle.setText(currentBeat.title);
-        binding.tvPrice.setText(String.format("€%.2f", currentBeat.price));
+        binding.tvPrice.setText(currentBeat.priceStandard > 0
+            ? String.format("€%.2f", currentBeat.priceStandard) : "Consultar");
         binding.tvGenre.setText(currentBeat.genre != null ? currentBeat.genre : "");
         binding.tvBpm.setText(currentBeat.bpm != null ? currentBeat.bpm + " BPM" : "");
-        if (currentBeat.musician != null) binding.tvArtist.setText(currentBeat.musician.name);
+        binding.tvArtist.setText(currentBeat.sellerName != null ? currentBeat.sellerName : "");
         if (currentBeat.coverUrl != null)
             Glide.with(this).load(currentBeat.coverUrl).into(binding.ivCover);
-        if (currentBeat.audioUrl != null) initPlayer();
+        if (currentBeat.audioPreviewUrl != null) initPlayer();
     }
 
     private void initPlayer() {
         player = new ExoPlayer.Builder(requireContext()).build();
-        player.setMediaItem(MediaItem.fromUri(currentBeat.audioUrl));
+        player.setMediaItem(MediaItem.fromUri(currentBeat.audioPreviewUrl));
         player.prepare();
     }
 
@@ -93,8 +94,8 @@ public class BeatDetailFragment extends Fragment {
         Map<String, Object> sale = new HashMap<>();
         sale.put("beat_id",   currentBeat.id);
         sale.put("buyer_id",  session.getUserId());
-        sale.put("seller_id", currentBeat.musicianId);
-        sale.put("amount",    currentBeat.price);
+        sale.put("seller_id", currentBeat.sellerId);
+        sale.put("amount",    currentBeat.priceStandard);
         sale.put("status",    "completed");
 
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
@@ -120,8 +121,8 @@ public class BeatDetailFragment extends Fragment {
     private void generateContract(SessionManager session) {
         binding.btnBuy.setText("Generando contrato...");
         ContractService cs = new ContractService();
-        cs.generateContract("beat", session.getUserId(), currentBeat.musicianId,
-            currentBeat.id, currentBeat.price,
+        cs.generateContract("beat", session.getUserId(), currentBeat.sellerId,
+            currentBeat.id, currentBeat.priceStandard,
             pdfUrl -> {
                 if (binding == null || !isAdded()) return;
                 binding.btnBuy.setText("✅ ¡Compra exitosa!");
@@ -137,7 +138,7 @@ public class BeatDetailFragment extends Fragment {
 
     private void resetBuyButton() {
         binding.btnBuy.setEnabled(true);
-        binding.btnBuy.setText(currentBeat != null ? String.format("Comprar Beat — €%.2f", currentBeat.price) : "Comprar");
+        binding.btnBuy.setText(currentBeat != null ? String.format("Comprar Beat — €%.2f", currentBeat.priceStandard) : "Comprar");
     }
 
     @Override public void onDestroyView() {

@@ -37,14 +37,10 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.VH> {
         }
         void bind(Lyric l) {
             title.setText(l.title);
-            price.setText(l.price > 0 ? String.format("€%.2f", l.price) : "Negociable");
+            price.setText(l.priceStandard > 0 ? String.format("€%.2f", l.priceStandard) : "Negociable");
             genre.setText(l.genre != null ? l.genre : "");
-            snippet.setText(l.snippet != null ? l.snippet : "");
-            if (l.musician != null) {
-                artist.setText(l.musician.name);
-                if (l.musician.avatarUrl != null)
-                    Glide.with(itemView).load(l.musician.avatarUrl).circleCrop().into(avatar);
-            }
+            snippet.setText(l.description != null ? l.description : "");
+            artist.setText(l.sellerName != null ? l.sellerName : "");
             itemView.setOnClickListener(v -> listener.onClick(l));
         }
     }

@@ -53,7 +53,7 @@ public class ServicesFragment extends Fragment {
     private void loadServices() {
         binding.progressBar.setVisibility(View.VISIBLE);
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
-        api.getMusiciansByTag("*", "cs.{" + currentType + "}", "name.asc")
+        api.getMusiciansByCategory("*", "cs.{" + currentType + "}", "name.asc")
             .enqueue(new Callback<List<Musician>>() {
                 @Override public void onResponse(Call<List<Musician>> c, Response<List<Musician>> r) {
                     binding.progressBar.setVisibility(View.GONE);

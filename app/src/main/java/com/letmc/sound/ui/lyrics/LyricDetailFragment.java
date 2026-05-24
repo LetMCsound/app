@@ -35,7 +35,7 @@ public class LyricDetailFragment extends Fragment {
 
     private void loadLyric(String id) {
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
-        api.getLyricById("*,musicians(name,avatar_url,slug,user_id)", "eq." + id)
+        api.getLyricById("*", "eq." + id)
             .enqueue(new Callback<List<Lyric>>() {
                 @Override public void onResponse(Call<List<Lyric>> c, Response<List<Lyric>> r) {
                     if (r.isSuccessful() && r.body() != null && !r.body().isEmpty()) {
@@ -52,13 +52,10 @@ public class LyricDetailFragment extends Fragment {
     private void populateUI() {
         binding.tvTitle.setText(currentLyric.title);
         binding.tvGenre.setText(currentLyric.genre != null ? currentLyric.genre : "");
-        binding.tvPrice.setText(currentLyric.price > 0 ? String.format("€%.2f", currentLyric.price) : "Precio negociable");
-        binding.tvSnippet.setText(currentLyric.snippet != null ? currentLyric.snippet : "Sin fragmento");
-        if (currentLyric.musician != null) {
-            binding.tvArtist.setText(currentLyric.musician.name);
-            if (currentLyric.musician.avatarUrl != null)
-                Glide.with(this).load(currentLyric.musician.avatarUrl).circleCrop().into(binding.ivAvatar);
-        }
+        binding.tvPrice.setText(currentLyric.priceStandard > 0
+            ? String.format("€%.2f", currentLyric.priceStandard) : "Precio negociable");
+        binding.tvSnippet.setText(currentLyric.description != null ? currentLyric.description : "Sin descripción");
+        binding.tvArtist.setText(currentLyric.sellerName != null ? currentLyric.sellerName : "");
     }
 
     private void startNegotiation(View view) {
@@ -67,9 +64,9 @@ public class LyricDetailFragment extends Fragment {
             Toast.makeText(requireContext(), "Inicia sesión para negociar", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (currentLyric == null || currentLyric.musician == null) return;
+        if (currentLyric == null || currentLyric.sellerId == null) return;
 
-        String sellerId = currentLyric.musician.userId;
+        String sellerId = currentLyric.sellerId;
         String buyerId  = session.getUserId();
         if (sellerId.equals(buyerId)) {
             Toast.makeText(requireContext(), "No puedes contactar tu propia letra", Toast.LENGTH_SHORT).show();

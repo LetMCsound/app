@@ -41,7 +41,7 @@ public class BeatsFragment extends Fragment {
     private void loadBeats() {
         binding.swipeRefresh.setRefreshing(true);
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
-        api.getBeats("*,musicians(name,avatar_url,slug)", "created_at.desc", "0-19")
+        api.getBeats("*", "created_at.desc", "eq.true", 20)
             .enqueue(new Callback<List<Beat>>() {
                 @Override public void onResponse(Call<List<Beat>> c, Response<List<Beat>> r) {
                     if (binding == null || !isAdded()) return;

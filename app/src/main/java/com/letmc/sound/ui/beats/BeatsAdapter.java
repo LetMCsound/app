@@ -45,10 +45,10 @@ public class BeatsAdapter extends RecyclerView.Adapter<BeatsAdapter.BeatViewHold
         }
         void bind(Beat beat) {
             title.setText(beat.title);
-            price.setText(String.format("€%.2f", beat.price));
+            price.setText(beat.priceStandard > 0 ? String.format("€%.2f", beat.priceStandard) : "Consultar");
             genre.setText(beat.genre != null ? beat.genre : "");
             bpm.setText(beat.bpm != null ? beat.bpm + " BPM" : "");
-            if (beat.musician != null) artist.setText(beat.musician.name);
+            artist.setText(beat.sellerName != null ? beat.sellerName : "");
             if (beat.coverUrl != null) {
                 Glide.with(itemView).load(beat.coverUrl)
                     .placeholder(R.drawable.placeholder_cover).into(cover);

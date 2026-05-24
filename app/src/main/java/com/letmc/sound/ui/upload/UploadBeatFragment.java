@@ -114,17 +114,21 @@ public class UploadBeatFragment extends Fragment {
 
     private void savebeat(String title, String price, String genre, String bpm, String description, String audioUrl, String coverUrl, String userId) {
         binding.tvUploadStatus.setText("Guardando beat...");
+        double priceVal = (price != null && !price.isEmpty()) ? Double.parseDouble(price) : 0;
         Map<String, Object> beat = new HashMap<>();
-        beat.put("title", title);
-        beat.put("price", Double.parseDouble(price));
-        beat.put("genre", genre);
-        beat.put("bpm", bpm);
-        beat.put("description", description);
-        beat.put("audio_url", audioUrl);
-        beat.put("cover_url", coverUrl);
-        beat.put("musician_id", userId);
-        beat.put("plays_count", 0);
-        beat.put("likes_count", 0);
+        beat.put("title",             title);
+        beat.put("price_standard",    priceVal);
+        beat.put("price_premium",     Math.round(priceVal * 2.5 * 100.0) / 100.0);
+        beat.put("price_exclusive",   Math.round(priceVal * 6.0 * 100.0) / 100.0);
+        beat.put("genre",             genre);
+        beat.put("bpm",               bpm);
+        beat.put("description",       description);
+        beat.put("audio_preview_url", audioUrl);
+        beat.put("cover_url",         coverUrl);
+        beat.put("seller_id",         userId);
+        beat.put("is_published",      true);
+        beat.put("plays",             0);
+        beat.put("likes",             0);
 
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
         api.insertBeat(beat).enqueue(new retrofit2.Callback<Void>() {
