@@ -41,6 +41,12 @@ public class LyricsAdapter extends RecyclerView.Adapter<LyricsAdapter.VH> {
             genre.setText(l.genre != null ? l.genre : "");
             snippet.setText(l.description != null ? l.description : "");
             artist.setText(l.sellerName != null ? l.sellerName : "");
+            if (l.coverUrl != null && !l.coverUrl.isEmpty()) {
+                Glide.with(itemView).load(l.coverUrl).centerCrop()
+                     .placeholder(android.R.color.darker_gray).into(avatar);
+            } else {
+                avatar.setImageResource(android.R.color.darker_gray);
+            }
             itemView.setOnClickListener(v -> listener.onClick(l));
         }
     }
