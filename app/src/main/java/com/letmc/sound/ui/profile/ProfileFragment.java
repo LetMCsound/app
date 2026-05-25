@@ -68,13 +68,8 @@ public class ProfileFragment extends Fragment {
         binding.btnUploadBeat.setOnClickListener(v ->
             Navigation.findNavController(view).navigate(R.id.action_profile_to_uploadBeat));
 
-        binding.btnSalesHistory.setOnClickListener(v -> {
-            try {
-                Navigation.findNavController(view).navigate(R.id.action_profile_to_salesHistory);
-            } catch (Exception e) {
-                Toast.makeText(requireContext(), "Historial de compras próximamente", Toast.LENGTH_SHORT).show();
-            }
-        });
+        binding.btnSalesHistory.setOnClickListener(v ->
+            Toast.makeText(requireContext(), "Historial de compras próximamente", Toast.LENGTH_SHORT).show());
 
         binding.btnLogout.setOnClickListener(v -> {
             session.clearSession();
