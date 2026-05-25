@@ -1,6 +1,7 @@
 package com.letmc.sound.data.api;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -11,6 +12,10 @@ public class SupabaseManager {
 
     private static Retrofit retrofit;
     private static String accessToken = null;
+
+    public interface OnTokenExpiredListener { void onTokenExpired(); }
+    private static OnTokenExpiredListener tokenExpiredListener = null;
+    public static void setOnTokenExpiredListener(OnTokenExpiredListener l) { tokenExpiredListener = l; }
 
     public static Retrofit getClient() {
         if (retrofit != null) return retrofit;
@@ -23,7 +28,22 @@ public class SupabaseManager {
                     .header("Content-Type", "application/json");
                 String token = accessToken != null ? accessToken : SUPABASE_ANON;
                 req.header("Authorization", "Bearer " + token);
-                return chain.proceed(req.build());
+                Response response = chain.proceed(req.build());
+
+                // Si el JWT expiró, limpiar token, notificar y reintentar con anon key
+                if (response.code() == 401 && accessToken != null) {
+                    response.close();
+                    accessToken = null;
+                    retrofit = null;
+                    if (tokenExpiredListener != null) tokenExpiredListener.onTokenExpired();
+                    okhttp3.Request retry = chain.request().newBuilder()
+                        .header("apikey", SUPABASE_ANON)
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + SUPABASE_ANON)
+                        .build();
+                    return chain.proceed(retry);
+                }
+                return response;
             })
             .addInterceptor(logging).build();
         retrofit = new Retrofit.Builder()
