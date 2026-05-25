@@ -30,6 +30,7 @@ public class LyricDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle s) {
         String lyricId = getArguments() != null ? getArguments().getString("lyricId") : null;
         if (lyricId != null) loadLyric(lyricId);
+        binding.btnBack.setOnClickListener(v -> requireActivity().onBackPressed());
         binding.btnNegotiate.setOnClickListener(v -> startNegotiation(view));
     }
 
@@ -54,8 +55,22 @@ public class LyricDetailFragment extends Fragment {
         binding.tvGenre.setText(currentLyric.genre != null ? currentLyric.genre : "");
         binding.tvPrice.setText(currentLyric.priceStandard > 0
             ? String.format("€%.2f", currentLyric.priceStandard) : "Precio negociable");
-        binding.tvSnippet.setText(currentLyric.description != null ? currentLyric.description : "Sin descripción");
+        binding.tvSnippet.setText(currentLyric.description != null ? currentLyric.description : "");
         binding.tvArtist.setText(currentLyric.sellerName != null ? currentLyric.sellerName : "");
+
+        // Preview de la letra: mostrar primeras líneas y cortar con fade
+        String content = currentLyric.content;
+        if (content != null && !content.isEmpty()) {
+            // Mostrar máximo 300 caracteres o primeras 8 líneas como preview
+            String[] lines = content.split("\n");
+            StringBuilder preview = new StringBuilder();
+            for (int i = 0; i < Math.min(8, lines.length); i++) {
+                preview.append(lines[i]).append("\n");
+            }
+            binding.tvLyricPreview.setText(preview.toString().trim());
+        } else {
+            binding.tvLyricPreview.setText("(Vista previa no disponible)");
+        }
     }
 
     private void startNegotiation(View view) {
