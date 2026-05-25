@@ -33,6 +33,7 @@ public class BeatDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle s) {
         String beatId = getArguments() != null ? getArguments().getString("beatId") : null;
         if (beatId != null) loadBeat(beatId);
+        binding.btnBack.setOnClickListener(v -> requireActivity().onBackPressed());
         binding.btnPlay.setOnClickListener(v -> togglePlay());
         binding.btnBuy.setOnClickListener(v -> purchaseBeat());
     }

@@ -66,9 +66,9 @@ public interface SupabaseApi {
 
     @GET("rest/v1/musicians")
     Call<List<Musician>> getMusiciansByTag(
-        @Query("select") String select,
-        @Query("tags")   String tagsFilter,
-        @Query("order")  String order);
+        @Query("select")     String select,
+        @Query("categories") String categoriesFilter,
+        @Query("order")      String order);
 
     @PATCH("rest/v1/musicians")
     @Headers("Prefer: return=minimal")
