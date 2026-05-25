@@ -32,6 +32,7 @@ public class ServiceDetailFragment extends Fragment {
         String musicianId = getArguments() != null ? getArguments().getString("musicianId") : null;
         serviceType = getArguments() != null ? getArguments().getString("serviceType", "filmmaker") : "filmmaker";
         if (musicianId != null) loadMusician(musicianId);
+        binding.btnBack.setOnClickListener(v -> requireActivity().onBackPressed());
         binding.btnContact.setOnClickListener(v -> startChat(view));
 
         String label = "filmmaker".equals(serviceType) ? "Film Maker" : "Diseñador Gráfico";

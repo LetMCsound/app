@@ -1,11 +1,14 @@
 package com.letmc.sound.ui.beats;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.*;
 import android.widget.Toast;
 import androidx.annotation.*;
 import androidx.fragment.app.Fragment;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
 import androidx.media3.exoplayer.ExoPlayer;
 import com.bumptech.glide.Glide;
 import com.letmc.sound.R;
@@ -69,15 +72,60 @@ public class BeatDetailFragment extends Fragment {
     }
 
     private void initPlayer() {
+        if (currentBeat.audioPreviewUrl == null || currentBeat.audioPreviewUrl.isEmpty()) {
+            binding.btnPlay.setEnabled(false);
+            binding.btnPlay.setText("Sin preview");
+            return;
+        }
         player = new ExoPlayer.Builder(requireContext()).build();
         player.setMediaItem(MediaItem.fromUri(currentBeat.audioPreviewUrl));
+        player.setPlayWhenReady(false);
         player.prepare();
+
+        // Listener para actualizar el botón y la barra de progreso
+        player.addListener(new Player.Listener() {
+            @Override public void onIsPlayingChanged(boolean isPlaying) {
+                if (binding == null || !isAdded()) return;
+                binding.btnPlay.setText(isPlaying ? "⏸ Pausar" : "▶ Preview");
+                binding.progressAudio.setVisibility(isPlaying ? View.VISIBLE : View.INVISIBLE);
+                if (isPlaying) startProgressUpdater();
+            }
+            @Override public void onPlaybackStateChanged(int state) {
+                if (binding == null || !isAdded()) return;
+                if (state == Player.STATE_ENDED) {
+                    binding.btnPlay.setText("▶ Preview");
+                    binding.progressAudio.setProgress(0);
+                    binding.progressAudio.setVisibility(View.INVISIBLE);
+                    player.seekTo(0);
+                }
+                if (state == Player.STATE_BUFFERING) {
+                    binding.btnPlay.setText("⏳ Cargando...");
+                }
+            }
+        });
+    }
+
+    private final Handler progressHandler = new Handler(Looper.getMainLooper());
+    private void startProgressUpdater() {
+        progressHandler.post(new Runnable() {
+            @Override public void run() {
+                if (player != null && player.isPlaying() && binding != null) {
+                    long dur = player.getDuration();
+                    long pos = player.getCurrentPosition();
+                    if (dur > 0) binding.progressAudio.setProgress((int)(pos * 100 / dur));
+                    progressHandler.postDelayed(this, 500);
+                }
+            }
+        });
     }
 
     private void togglePlay() {
         if (player == null) return;
-        if (player.isPlaying()) { player.pause(); binding.btnPlay.setText("▶ Play Preview"); }
-        else { player.play(); binding.btnPlay.setText("⏸ Pausar"); }
+        if (player.isPlaying()) {
+            player.pause();
+        } else {
+            player.play();
+        }
     }
 
     private void purchaseBeat() {
@@ -144,6 +192,7 @@ public class BeatDetailFragment extends Fragment {
 
     @Override public void onDestroyView() {
         super.onDestroyView();
+        progressHandler.removeCallbacksAndMessages(null);
         if (player != null) { player.release(); player = null; }
         binding = null;
     }
