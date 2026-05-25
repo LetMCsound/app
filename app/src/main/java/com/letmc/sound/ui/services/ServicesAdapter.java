@@ -38,7 +38,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.VH> {
             name.setText(m.name != null ? m.name : "Sin nombre");
             bio.setText(m.bio != null ? m.bio : "");
             location.setText(m.location != null ? "📍 " + m.location : "");
-            tags.setText(m.tags != null ? m.tags : "");
+            tags.setText(m.categories != null && !m.categories.isEmpty() ? String.join(" · ", m.categories) : "");
             if (m.avatarUrl != null) Glide.with(itemView).load(m.avatarUrl).circleCrop().into(avatar);
             if (m.coverUrl != null)  Glide.with(itemView).load(m.coverUrl).centerCrop().into(cover);
             itemView.setOnClickListener(v -> listener.onClick(m));
