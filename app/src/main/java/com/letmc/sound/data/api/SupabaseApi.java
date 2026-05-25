@@ -8,67 +8,65 @@ import retrofit2.http.*;
 
 public interface SupabaseApi {
 
-    // ── BEATS ───────────────────────────────────────────────────
+    // ── BEATS ────────────────────────────────────────────────────
     @GET("rest/v1/beats")
     Call<List<Beat>> getBeats(
-        @Query("select") String select,
-        @Query("order") String order,
-        @Query("is_published") String isPublished,
-        @Query("limit") int limit);
+        @Query("select")  String select,
+        @Query("order")   String order,
+        @Header("Range")  String range);
 
     @GET("rest/v1/beats")
     Call<List<Beat>> getBeatById(
         @Query("select") String select,
-        @Query("id") String idFilter);
+        @Query("id")     String idFilter);
 
     @GET("rest/v1/beats")
     Call<List<Beat>> getBeatsBySeller(
-        @Query("select") String select,
+        @Query("select")    String select,
         @Query("seller_id") String sellerIdFilter,
-        @Query("order") String order);
+        @Query("order")     String order);
 
     @POST("rest/v1/beats")
     @Headers("Prefer: return=minimal")
     Call<Void> insertBeat(@Body Map<String, Object> body);
 
-    // ── LYRICS ──────────────────────────────────────────────────
+    // ── LYRICS ───────────────────────────────────────────────────
     @GET("rest/v1/lyrics")
     Call<List<Lyric>> getLyrics(
         @Query("select") String select,
-        @Query("order") String order,
-        @Query("is_published") String isPublished,
-        @Query("limit") int limit);
+        @Query("order")  String order,
+        @Header("Range") String range);
 
     @GET("rest/v1/lyrics")
     Call<List<Lyric>> getLyricById(
         @Query("select") String select,
-        @Query("id") String idFilter);
+        @Query("id")     String idFilter);
 
     @GET("rest/v1/lyrics")
     Call<List<Lyric>> getLyricsBySeller(
-        @Query("select") String select,
+        @Query("select")    String select,
         @Query("seller_id") String sellerIdFilter);
 
     @POST("rest/v1/lyrics")
     @Headers("Prefer: return=minimal")
     Call<Void> insertLyric(@Body Map<String, Object> body);
 
-    // ── MUSICIANS ───────────────────────────────────────────────
+    // ── MUSICIANS ────────────────────────────────────────────────
     @GET("rest/v1/musicians")
     Call<List<Musician>> getMusicianById(
-        @Query("select") String select,
+        @Query("select")  String select,
         @Query("user_id") String userIdFilter);
 
     @GET("rest/v1/musicians")
     Call<List<Musician>> getMusicianBySlug(
         @Query("select") String select,
-        @Query("slug") String slugFilter);
+        @Query("slug")   String slugFilter);
 
     @GET("rest/v1/musicians")
-    Call<List<Musician>> getMusiciansByCategory(
+    Call<List<Musician>> getMusiciansByTag(
         @Query("select") String select,
-        @Query("categories") String categoriesFilter,
-        @Query("order") String order);
+        @Query("tags")   String tagsFilter,
+        @Query("order")  String order);
 
     @PATCH("rest/v1/musicians")
     @Headers("Prefer: return=minimal")
@@ -76,17 +74,17 @@ public interface SupabaseApi {
         @Query("user_id") String userIdFilter,
         @Body Map<String, Object> body);
 
-    // ── CONVERSATIONS ────────────────────────────────────────────
+    // ── CONVERSATIONS ─────────────────────────────────────────────
     @GET("rest/v1/conversations")
     Call<List<Conversation>> getConversations(
         @Query("select") String select,
-        @Query("or") String orFilter,
-        @Query("order") String order);
+        @Query("or")     String orFilter,
+        @Query("order")  String order);
 
     @GET("rest/v1/conversations")
     Call<List<Conversation>> getConversationById(
         @Query("select") String select,
-        @Query("id") String idFilter);
+        @Query("id")     String idFilter);
 
     @POST("rest/v1/conversations")
     @Headers("Prefer: return=representation")
@@ -98,34 +96,34 @@ public interface SupabaseApi {
         @Query("id") String idFilter,
         @Body Map<String, Object> body);
 
-    // ── MESSAGES ────────────────────────────────────────────────
+    // ── MESSAGES ─────────────────────────────────────────────────
     @GET("rest/v1/messages")
     Call<List<Message>> getMessages(
-        @Query("select") String select,
+        @Query("select")          String select,
         @Query("conversation_id") String convId,
-        @Query("order") String order);
+        @Query("order")           String order);
 
     @POST("rest/v1/messages")
     @Headers("Prefer: return=representation")
     Call<Message> sendMessage(@Body Map<String, Object> body);
 
-    // ── VENTAS ──────────────────────────────────────────────────
+    // ── VENTAS ───────────────────────────────────────────────────
     @POST("rest/v1/ventas")
     @Headers("Prefer: return=minimal")
     Call<Void> createSale(@Body Map<String, Object> body);
 
     @GET("rest/v1/ventas")
     Call<List<Sale>> getSalesByBuyer(
-        @Query("select") String select,
+        @Query("select")   String select,
         @Query("buyer_id") String buyerFilter,
-        @Query("order") String order);
+        @Query("order")    String order);
 
-    // ── NOTIFICATIONS ────────────────────────────────────────────
+    // ── NOTIFICATIONS ─────────────────────────────────────────────
     @GET("rest/v1/notifications")
     Call<List<Notification>> getNotifications(
-        @Query("select") String select,
+        @Query("select")  String select,
         @Query("user_id") String userId,
-        @Query("order") String order);
+        @Query("order")   String order);
 
     @PATCH("rest/v1/notifications")
     @Headers("Prefer: return=minimal")

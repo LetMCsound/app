@@ -46,21 +46,26 @@ public class ServicesFragment extends Fragment {
             @Override public void onTabUnselected(TabLayout.Tab t) {}
             @Override public void onTabReselected(TabLayout.Tab t) {}
         });
-
         loadServices();
     }
 
     private void loadServices() {
         binding.progressBar.setVisibility(View.VISIBLE);
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
-        api.getMusiciansByCategory("*", "cs.{" + currentType + "}", "name.asc")
+        // Usa columna 'tags' (no 'categories') y operador cs.{} para contains
+        api.getMusiciansByTag("*", "cs.{" + currentType + "}", "name.asc")
             .enqueue(new Callback<List<Musician>>() {
                 @Override public void onResponse(Call<List<Musician>> c, Response<List<Musician>> r) {
+                    if (binding == null || !isAdded()) return;
                     binding.progressBar.setVisibility(View.GONE);
-                    if (r.isSuccessful() && r.body() != null) adapter.setMusicians(r.body());
-                    else Toast.makeText(requireContext(), "Error cargando servicios", Toast.LENGTH_SHORT).show();
+                    if (r.isSuccessful() && r.body() != null) {
+                        adapter.setMusicians(r.body());
+                    } else {
+                        Toast.makeText(requireContext(), "Error cargando servicios", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 @Override public void onFailure(Call<List<Musician>> c, Throwable t) {
+                    if (binding == null || !isAdded()) return;
                     binding.progressBar.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Sin conexión", Toast.LENGTH_SHORT).show();
                 }

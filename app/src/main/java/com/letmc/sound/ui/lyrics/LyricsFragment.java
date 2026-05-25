@@ -41,14 +41,19 @@ public class LyricsFragment extends Fragment {
     private void loadLyrics() {
         binding.swipeRefresh.setRefreshing(true);
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
-        api.getLyrics("*", "created_at.desc", "eq.true", 20)
+        api.getLyrics("*", "created_at.desc", "0-19")
             .enqueue(new Callback<List<Lyric>>() {
                 @Override public void onResponse(Call<List<Lyric>> c, Response<List<Lyric>> r) {
+                    if (binding == null || !isAdded()) return;
                     binding.swipeRefresh.setRefreshing(false);
-                    if (r.isSuccessful() && r.body() != null) adapter.setLyrics(r.body());
-                    else Toast.makeText(requireContext(), "Error cargando letras", Toast.LENGTH_SHORT).show();
+                    if (r.isSuccessful() && r.body() != null) {
+                        adapter.setLyrics(r.body());
+                    } else {
+                        Toast.makeText(requireContext(), "Error cargando letras", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 @Override public void onFailure(Call<List<Lyric>> c, Throwable t) {
+                    if (binding == null || !isAdded()) return;
                     binding.swipeRefresh.setRefreshing(false);
                     Toast.makeText(requireContext(), "Sin conexión", Toast.LENGTH_SHORT).show();
                 }
