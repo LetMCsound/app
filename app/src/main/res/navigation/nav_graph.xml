@@ -63,8 +63,10 @@
     <fragment android:id="@+id/profileFragment"
         android:name="com.letmc.sound.ui.profile.ProfileFragment"
         android:label="Perfil">
-        <action android:id="@+id/action_profile_to_editProfile" app:destination="@id/editProfileFragment"/>
-        <action android:id="@+id/action_profile_to_uploadBeat" app:destination="@id/uploadBeatFragment"/>
+        <action android:id="@+id/action_profile_to_editProfile"  app:destination="@id/editProfileFragment"/>
+        <action android:id="@+id/action_profile_to_uploadBeat"  app:destination="@id/uploadBeatFragment"/>
+        <action android:id="@+id/action_profile_to_beatDetail"  app:destination="@id/beatDetailFragment"/>
+        <action android:id="@+id/action_profile_to_lyricDetail" app:destination="@id/lyricDetailFragment"/>
     </fragment>
 
     <fragment android:id="@+id/editProfileFragment"

@@ -65,6 +65,11 @@ public interface SupabaseApi {
         @Query("slug")   String slugFilter);
 
     @GET("rest/v1/musicians")
+    Call<List<Musician>> getAllMusicians(
+        @Query("select") String select,
+        @Query("order")  String order);
+
+    @GET("rest/v1/musicians")
     Call<List<Musician>> getMusiciansByTag(
         @Query("select")     String select,
         @Query("categories") String categoriesFilter,

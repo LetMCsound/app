@@ -8,7 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <!-- Cover -->
         <ImageView
@@ -22,16 +24,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-            <!-- Avatar -->
+            <!-- Avatar — solapado sobre la cover con margen negativo -->
             <ImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
                 android:scaleType="centerCrop"
-                android:background="@color/bg_elevated"
-                android:layout_marginTop="-40dp"/>
+                android:background="@drawable/bg_avatar_circle"
+                android:layout_marginTop="-42dp"/>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -137,6 +141,78 @@
                 app:strokeColor="#FF4D4D33"
                 app:strokeWidth="1dp"
                 android:layout_marginTop="12dp"/>
+
+            <!-- Mis publicaciones -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mis publicaciones"
+                android:textColor="@color/text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="4dp"/>
+
+            <ProgressBar
+                android:id="@+id/progress_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:indeterminateTint="@color/accent"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_no_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aún no has subido contenido"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:visibility="gone"
+                android:layout_marginTop="12dp"/>
+
+            <!-- Beats del usuario -->
+            <TextView
+                android:id="@+id/tv_beats_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎵 Beats"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_beats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
+                android:layout_marginTop="6dp"/>
+
+            <!-- Letras del usuario -->
+            <TextView
+                android:id="@+id/tv_lyrics_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📝 Letras"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_lyrics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="32dp"/>
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
