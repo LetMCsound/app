@@ -41,7 +41,7 @@ public class LyricsFragment extends Fragment {
     private void loadLyrics() {
         binding.swipeRefresh.setRefreshing(true);
         SupabaseApi api = SupabaseManager.createService(SupabaseApi.class);
-        api.getLyrics("*", "created_at.desc", "0-19")
+        api.getLyrics("*", "created_at.desc", "eq.true", 20)
             .enqueue(new Callback<List<Lyric>>() {
                 @Override public void onResponse(Call<List<Lyric>> c, Response<List<Lyric>> r) {
                     if (binding == null || !isAdded()) return;

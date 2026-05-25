@@ -11,9 +11,10 @@ public interface SupabaseApi {
     // ── BEATS ────────────────────────────────────────────────────
     @GET("rest/v1/beats")
     Call<List<Beat>> getBeats(
-        @Query("select")  String select,
-        @Query("order")   String order,
-        @Header("Range")  String range);
+        @Query("select")       String select,
+        @Query("order")        String order,
+        @Query("is_published") String isPublished,
+        @Query("limit")        int limit);
 
     @GET("rest/v1/beats")
     Call<List<Beat>> getBeatById(
@@ -33,9 +34,10 @@ public interface SupabaseApi {
     // ── LYRICS ───────────────────────────────────────────────────
     @GET("rest/v1/lyrics")
     Call<List<Lyric>> getLyrics(
-        @Query("select") String select,
-        @Query("order")  String order,
-        @Header("Range") String range);
+        @Query("select")       String select,
+        @Query("order")        String order,
+        @Query("is_published") String isPublished,
+        @Query("limit")        int limit);
 
     @GET("rest/v1/lyrics")
     Call<List<Lyric>> getLyricById(
